@@ -49,66 +49,99 @@ const bookController = {
     }
   },
 
-  // Crear nuevo libro
-  async create(req, res) {
-    try {
-      const { title, publicationYear, categoryId, authorId, publisherId } = req.body;
-      let coverImage = null;
+// Crear nuevo libro
+async create(req, res) {
+  try {
+    console.log('📥 Datos recibidos en POST:');
+    console.log('Body:', req.body);
+    console.log('File:', req.file);
+    
+    const { title, publicationYear, categoryId, authorId, publisherId } = req.body;
+    
+    console.log('Valores extraídos:');
+    console.log('title:', title);
+    console.log('publicationYear:', publicationYear);
+    console.log('categoryId:', categoryId);
+    console.log('authorId:', authorId);
+    console.log('publisherId:', publisherId);
+    
+    let coverImage = null;
 
-      // Verificar que existan categorías, autores y editoriales
-      const categoriesCount = await Category.count();
-      const authorsCount = await Author.count();
-      const publishersCount = await Publisher.count();
+    // Verificar que existan categorías, autores y editoriales
+    const categoriesCount = await Category.count();
+    const authorsCount = await Author.count();
+    const publishersCount = await Publisher.count();
 
-      if (categoriesCount === 0) {
-        req.flash('error', 'No hay categorías creadas. Debe crear al menos una categoría antes de crear un libro.');
-        return res.redirect('/books/create');
-      }
+    console.log('Conteos:', { categoriesCount, authorsCount, publishersCount });
 
-      if (authorsCount === 0) {
-        req.flash('error', 'No hay autores creados. Debe crear al menos un autor antes de crear un libro.');
-        return res.redirect('/books/create');
-      }
-
-      if (publishersCount === 0) {
-        req.flash('error', 'No hay editoriales creadas. Debe crear al menos una editorial antes de crear un libro.');
-        return res.redirect('/books/create');
-      }
-
-      // Validar campos requeridos
-      if (!title || !publicationYear || !categoryId || !authorId || !publisherId) {
-        req.flash('error', 'Todos los campos son requeridos');
-        return res.redirect('/books/create');
-      }
-
-      // Subir imagen si existe
-      if (req.file) {
-        coverImage = '/uploads/books/' + req.file.filename;
-      }
-
-      const book = await Book.create({
-        title,
-        coverImage,
-        publicationYear,
-        category_id: categoryId,
-        author_id: authorId,
-        publisher_id: publisherId
-      });
-
-      // Obtener el autor para enviar email
-      const author = await Author.findByPk(authorId);
-      if (author && author.email) {
-        await sendNewBookEmail(author.email, author.name, book.title);
-      }
-
-      req.flash('success', 'Libro creado exitosamente');
-      res.redirect('/books');
-    } catch (error) {
-      console.error('Error al crear libro:', error);
-      req.flash('error', 'Error al crear el libro: ' + error.message);
-      res.redirect('/books/create');
+    if (categoriesCount === 0) {
+      req.flash('error', 'No hay categorías creadas');
+      return res.redirect('/books/create');
     }
-  },
+
+    if (authorsCount === 0) {
+      req.flash('error', 'No hay autores creados');
+      return res.redirect('/books/create');
+    }
+
+    if (publishersCount === 0) {
+      req.flash('error', 'No hay editoriales creadas');
+      return res.redirect('/books/create');
+    }
+
+    // Validar campos requeridos
+    if (!title || !publicationYear || !categoryId || !authorId || !publisherId) {
+      console.log('❌ Campos faltantes:');
+      if (!title) console.log('- title');
+      if (!publicationYear) console.log('- publicationYear');
+      if (!categoryId) console.log('- categoryId');
+      if (!authorId) console.log('- authorId');
+      if (!publisherId) console.log('- publisherId');
+      
+      req.flash('error', 'Todos los campos son requeridos');
+      return res.redirect('/books/create');
+    }
+
+    // Subir imagen si existe
+    if (req.file) {
+      coverImage = '/uploads/books/' + req.file.filename;
+    }
+
+    console.log('📝 Creando libro con:', {
+      title,
+      coverImage,
+      publicationYear,
+      categoryId: parseInt(categoryId),
+      authorId: parseInt(authorId),
+      publisherId: parseInt(publisherId)
+    });
+
+    const book = await Book.create({
+      title,
+      coverImage,
+      publicationYear: parseInt(publicationYear),
+      categoryId: parseInt(categoryId),
+      authorId: parseInt(authorId),
+      publisherId: parseInt(publisherId)
+    });
+
+    console.log('✅ Libro creado:', book.toJSON());
+
+    // Obtener el autor para enviar email
+    const author = await Author.findByPk(authorId);
+    if (author && author.email) {
+      await sendNewBookEmail(author.email, author.name, book.title);
+      console.log('📧 Email enviado a:', author.email);
+    }
+
+    req.flash('success', 'Libro creado exitosamente');
+    res.redirect('/books');
+  } catch (error) {
+    console.error('❌ Error al crear libro:', error);
+    req.flash('error', 'Error al crear el libro: ' + error.message);
+    res.redirect('/books/create');
+  }
+ },
 
   // Mostrar formulario de edición
   async editForm(req, res) {
@@ -151,6 +184,9 @@ const bookController = {
     try {
       const { id } = req.params;
       const { title, publicationYear, categoryId, authorId, publisherId } = req.body;
+    
+      console.log('✏️ Editando libro ID:', id);
+      console.log('Datos recibidos:', { title, publicationYear, categoryId, authorId, publisherId });
 
       const book = await Book.findByPk(id);
       if (!book) {
@@ -158,7 +194,7 @@ const bookController = {
         return res.redirect('/books');
       }
 
-      // Validar campos requeridos (todos excepto imagen)
+      // Validar campos requeridos
       if (!title || !publicationYear || !categoryId || !authorId || !publisherId) {
         req.flash('error', 'Todos los campos excepto la imagen son requeridos');
         return res.redirect(`/books/edit/${id}`);
@@ -167,7 +203,6 @@ const bookController = {
       // Subir nueva imagen si existe
       let coverImage = book.coverImage;
       if (req.file) {
-        // Eliminar imagen anterior si existe
         if (book.coverImage) {
           const oldImagePath = path.join(__dirname, '../public', book.coverImage);
           if (fs.existsSync(oldImagePath)) {
@@ -180,11 +215,13 @@ const bookController = {
       await book.update({
         title,
         coverImage,
-        publicationYear,
-        category_id: categoryId,
-        author_id: authorId,
-        publisher_id: publisherId
+        publicationYear: parseInt(publicationYear),
+        categoryId: parseInt(categoryId),
+        authorId: parseInt(authorId),
+        publisherId: parseInt(publisherId)
       });
+
+      console.log('✅ Libro actualizado:', book.toJSON());
 
       req.flash('success', 'Libro actualizado exitosamente');
       res.redirect('/books');

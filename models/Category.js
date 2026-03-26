@@ -10,26 +10,14 @@ const Category = sequelize.define('Category', {
   name: {
     type: DataTypes.STRING(100),
     allowNull: false,
-    unique: true,
-    validate: {
-      notEmpty: {
-        msg: 'El nombre de la categoría es requerido'
-      }
-    }
+    unique: true
   },
   description: {
     type: DataTypes.TEXT,
-    allowNull: false,
-    validate: {
-      notEmpty: {
-        msg: 'La descripción es requerida'
-      }
-    }
+    allowNull: false
   }
 }, {
-  tableName: 'categories',
-  timestamps: true,
-  underscored: true
+  tableName: 'categories'
 });
 
 module.exports = Category;

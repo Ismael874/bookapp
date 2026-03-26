@@ -5,17 +5,17 @@ const homeController = {
   // Mostrar página principal con listado de libros
   async index(req, res) {
     try {
+      console.log('🏠 Cargando página principal...');
+    
       const { title, categories } = req.query;
       let whereConditions = {};
 
-      // Filtrar por título
       if (title && title.trim()) {
         whereConditions.title = {
           [Op.like]: `%${title.trim()}%`
         };
       }
 
-      // Filtrar por categorías
       let categoryFilter = {};
       if (categories && categories.length > 0) {
         const categoryIds = Array.isArray(categories) ? categories : [categories];
@@ -27,27 +27,33 @@ const homeController = {
       const books = await Book.findAll({
         where: whereConditions,
         include: [
-          { model: Category, as: 'category', where: categoryFilter },
-          { model: Author, as: 'author' },
-          { model: Publisher, as: 'publisher' }
+          { model: Category, as: 'category', required: false },
+          { model: Author, as: 'author', required: false },
+          { model: Publisher, as: 'publisher', required: false }
         ],
         order: [['createdAt', 'DESC']]
       });
-
+  
       const allCategories = await Category.findAll({
         order: [['name', 'ASC']]
       });
 
+      console.log(`📚 Libros encontrados: ${books.length}`);
+      books.forEach(book => {
+      console.log(`- ${book.title}: Cat:${book.category?.name || 'N/A'}, Aut:${book.author?.name || 'N/A'}, Pub:${book.publisher?.name || 'N/A'}`);
+      });
+      console.log(`🏷️ Categorías disponibles: ${allCategories.length}`);
+
       res.render('home/index', {
         title: 'BookApp - Inicio',
-        books,
+        books: books,
         categories: allCategories,
-        filters: { title, categories: categories || [] },
+        filters: { title: title || '', categories: categories || [] },
         layout: 'main'
       });
     } catch (error) {
-      console.error('Error en home:', error);
-      res.status(500).send('Error al cargar la página principal');
+      console.error('❌Error en home:', error);
+      res.status(500).send('Error al cargar la página principal: ' + error.message);
     }
   },
 

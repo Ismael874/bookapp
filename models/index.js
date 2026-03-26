@@ -5,14 +5,14 @@ const Author = require('./Author');
 const Publisher = require('./Publisher');
 
 // Establecer relaciones
-Category.hasMany(Book, { foreignKey: 'category_id', as: 'books' });
-Book.belongsTo(Category, { foreignKey: 'category_id', as: 'category' });
+Category.hasMany(Book, { foreignKey: 'categoryId', as: 'books' });
+Book.belongsTo(Category, { foreignKey: 'categoryId', as: 'category' });
 
-Author.hasMany(Book, { foreignKey: 'author_id', as: 'books' });
-Book.belongsTo(Author, { foreignKey: 'author_id', as: 'author' });
+Author.hasMany(Book, { foreignKey: 'authorId', as: 'books' });
+Book.belongsTo(Author, { foreignKey: 'authorId', as: 'author' });
 
-Publisher.hasMany(Book, { foreignKey: 'publisher_id', as: 'books' });
-Book.belongsTo(Publisher, { foreignKey: 'publisher_id', as: 'publisher' });
+Publisher.hasMany(Book, { foreignKey: 'publisherId', as: 'books' });
+Book.belongsTo(Publisher, { foreignKey: 'publisherId', as: 'publisher' });
 
 module.exports = {
   sequelize,

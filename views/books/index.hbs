@@ -5,6 +5,7 @@
     </a>
 </div>
 
+{{#if books.length}}
 <div class="table-responsive">
     <table class="table table-striped table-hover">
         <thead class="table-dark">
@@ -30,23 +31,25 @@
                     {{/if}}
                 </td>
                 <td>{{publicationYear}}</td>
-                <td>{{category.name}}</td>
-                <td>{{author.name}}</td>
-                <td>{{publisher.name}}</td>
+                <td>{{#if category}}{{category.name}}{{else}}<span class="text-danger">Sin categoría</span>{{/if}}</td>
+                <td>{{#if author}}{{author.name}}{{else}}<span class="text-danger">Sin autor</span>{{/if}}</td>
+                <td>{{#if publisher}}{{publisher.name}}{{else}}<span class="text-danger">Sin editorial</span>{{/if}}</td>
                 <td>
                     <a href="/books/edit/{{id}}" class="btn btn-warning btn-sm">
-                        <i class="fas fa-edit"></i>
+                        <i class="fas fa-edit"></i> Editar
                     </a>
                     <a href="/books/delete/{{id}}" class="btn btn-danger btn-sm">
-                        <i class="fas fa-trash"></i>
+                        <i class="fas fa-trash"></i> Eliminar
                     </a>
                 </td>
-            </tr>
-            {{else}}
-            <tr>
-                <td colspan="7" class="text-center">No hay libros registrados</td>
             </tr>
             {{/each}}
         </tbody>
     </table>
 </div>
+{{else}}
+<div class="alert alert-info">
+    <i class="fas fa-info-circle"></i> No hay libros registrados.
+    <a href="/books/create" class="alert-link">Crea tu primer libro</a>
+</div>
+{{/if}}

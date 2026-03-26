@@ -9,35 +9,18 @@ const Publisher = sequelize.define('Publisher', {
   },
   name: {
     type: DataTypes.STRING(150),
-    allowNull: false,
-    validate: {
-      notEmpty: {
-        msg: 'El nombre de la editorial es requerido'
-      }
-    }
+    allowNull: false
   },
   phone: {
     type: DataTypes.STRING(20),
-    allowNull: false,
-    validate: {
-      notEmpty: {
-        msg: 'El teléfono es requerido'
-      }
-    }
+    allowNull: false
   },
   country: {
     type: DataTypes.STRING(100),
-    allowNull: false,
-    validate: {
-      notEmpty: {
-        msg: 'El país es requerido'
-      }
-    }
+    allowNull: false
   }
 }, {
-  tableName: 'publishers',
-  timestamps: true,
-  underscored: true
+  tableName: 'publishers'
 });
 
 module.exports = Publisher;

@@ -9,30 +9,18 @@ const Author = sequelize.define('Author', {
   },
   name: {
     type: DataTypes.STRING(150),
-    allowNull: false,
-    validate: {
-      notEmpty: {
-        msg: 'El nombre del autor es requerido'
-      }
-    }
+    allowNull: false
   },
   email: {
     type: DataTypes.STRING(150),
     allowNull: false,
     unique: true,
     validate: {
-      notEmpty: {
-        msg: 'El email es requerido'
-      },
-      isEmail: {
-        msg: 'Debe ser un email válido'
-      }
+      isEmail: true
     }
   }
 }, {
-  tableName: 'authors',
-  timestamps: true,
-  underscored: true
+  tableName: 'authors'
 });
 
 module.exports = Author;

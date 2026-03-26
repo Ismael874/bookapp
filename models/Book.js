@@ -9,43 +9,18 @@ const Book = sequelize.define('Book', {
   },
   title: {
     type: DataTypes.STRING(200),
-    allowNull: false,
-    validate: {
-      notEmpty: {
-        msg: 'El título es requerido'
-      }
-    }
+    allowNull: false
   },
   coverImage: {
     type: DataTypes.STRING(500),
-    allowNull: true,
-    field: 'cover_image'
+    allowNull: true
   },
   publicationYear: {
     type: DataTypes.INTEGER,
-    allowNull: false,
-    field: 'publication_year',
-    validate: {
-      notEmpty: {
-        msg: 'El año de publicación es requerido'
-      },
-      isInt: {
-        msg: 'El año debe ser un número válido'
-      },
-      min: {
-        args: [1000],
-        msg: 'El año debe ser mayor a 1000'
-      },
-      max: {
-        args: [new Date().getFullYear()],
-        msg: `El año no puede ser mayor a ${new Date().getFullYear()}`
-      }
-    }
+    allowNull: false
   }
 }, {
-  tableName: 'books',
-  timestamps: true,
-  underscored: true
+  tableName: 'books'
 });
 
 module.exports = Book;
