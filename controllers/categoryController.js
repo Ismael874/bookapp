@@ -5,17 +5,10 @@ const categoryController = {
   async index(req, res) {
     try {
       const categories = await Category.findAll({
-        include: [
-          {
-            model: Book,
-            as: 'books',
-            attributes: ['id']
-          }
-        ],
+        include: [{ model: Book, as: 'books', attributes: ['id'] }],
         order: [['name', 'ASC']]
       });
 
-      // Calcular cantidad de libros por categoría
       const categoriesWithCount = categories.map(category => {
         const plainCategory = category.get({ plain: true });
         plainCategory.bookCount = plainCategory.books ? plainCategory.books.length : 0;
@@ -28,8 +21,8 @@ const categoryController = {
         layout: 'main'
       });
     } catch (error) {
-      console.error('Error en listado de categorías:', error);
-      req.flash('error', 'Error al cargar el listado de categorías');
+      console.error('Error:', error);
+      req.flash('error', 'Error al cargar las categorías');
       res.redirect('/');
     }
   },
@@ -56,7 +49,7 @@ const categoryController = {
       req.flash('success', 'Categoría creada exitosamente');
       res.redirect('/categories');
     } catch (error) {
-      console.error('Error al crear categoría:', error);
+      console.error('Error:', error);
       req.flash('error', 'Error al crear la categoría: ' + error.message);
       res.redirect('/categories/create');
     }
@@ -79,8 +72,8 @@ const categoryController = {
         layout: 'main'
       });
     } catch (error) {
-      console.error('Error al mostrar formulario de edición:', error);
-      req.flash('error', 'Error al cargar el formulario de edición');
+      console.error('Error:', error);
+      req.flash('error', 'Error al cargar el formulario');
       res.redirect('/categories');
     }
   },
@@ -106,7 +99,7 @@ const categoryController = {
       req.flash('success', 'Categoría actualizada exitosamente');
       res.redirect('/categories');
     } catch (error) {
-      console.error('Error al actualizar categoría:', error);
+      console.error('Error:', error);
       req.flash('error', 'Error al actualizar la categoría');
       res.redirect(`/categories/edit/${id}`);
     }
@@ -129,7 +122,7 @@ const categoryController = {
         layout: 'main'
       });
     } catch (error) {
-      console.error('Error al mostrar confirmación:', error);
+      console.error('Error:', error);
       req.flash('error', 'Error al cargar la confirmación');
       res.redirect('/categories');
     }
@@ -150,8 +143,8 @@ const categoryController = {
       req.flash('success', 'Categoría eliminada exitosamente');
       res.redirect('/categories');
     } catch (error) {
-      console.error('Error al eliminar categoría:', error);
-      req.flash('error', 'Error al eliminar la categoría. Es posible que tenga libros asociados.');
+      console.error('Error:', error);
+      req.flash('error', 'Error al eliminar la categoría');
       res.redirect('/categories');
     }
   }

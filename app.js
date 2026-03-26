@@ -3,6 +3,7 @@ const path = require('path');
 const session = require('express-session');
 const flash = require('connect-flash');
 const { engine } = require('express-handlebars');
+require('dotenv').config();
 
 const app = express();
 
@@ -16,7 +17,6 @@ app.engine('hbs', engine({
     eq: (a, b) => a === b,
     lt: (a, b) => a < b,
     gt: (a, b) => a > b,
-    formatYear: (year) => year,
     selected: (a, b) => a == b ? 'selected' : '',
     checked: (a, b) => {
       if (Array.isArray(a)) {
@@ -54,12 +54,18 @@ app.use((req, res, next) => {
   next();
 });
 
-// Rutas
-app.use('/', require('./routes/homeRoutes'));
-app.use('/books', require('./routes/bookRoutes'));
-app.use('/categories', require('./routes/categoryRoutes'));
-app.use('/authors', require('./routes/authorRoutes'));
-app.use('/publishers', require('./routes/publisherRoutes'));
+// IMPORTANTE: Importar y usar las rutas
+const homeRoutes = require('./routes/homeRoutes');
+const bookRoutes = require('./routes/bookRoutes');
+const categoryRoutes = require('./routes/categoryRoutes');
+const authorRoutes = require('./routes/authorRoutes');
+const publisherRoutes = require('./routes/publisherRoutes');
+
+app.use('/', homeRoutes);
+app.use('/books', bookRoutes);
+app.use('/categories', categoryRoutes);
+app.use('/authors', authorRoutes);
+app.use('/publishers', publisherRoutes);
 
 // Manejo de errores 404
 app.use((req, res) => {
