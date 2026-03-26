@@ -1,0 +1,26 @@
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <h3><i class="fas fa-exclamation-triangle"></i> Confirmar Eliminación</h3>
+            </div>
+            <div class="card-body">
+                <p>¿Está seguro que desea eliminar el siguiente libro?</p>
+                <div class="alert alert-warning">
+                    <strong>Título:</strong> {{book.title}}<br>
+                    <strong>Año:</strong> {{book.publicationYear}}
+                </div>
+                <form action="/books/delete/{{book.id}}" method="POST">
+                    <div class="d-flex justify-content-between">
+                        <a href="/books" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Aceptar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

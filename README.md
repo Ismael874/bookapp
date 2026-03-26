@@ -2,19 +2,19 @@
 
 Aplicación web para gestión de libros, categorías, autores y editoriales desarrollada con Node.js, Express, Sequelize y Handlebars.
 
-## 📋 Características
+##  Características
 
-- ✅ Arquitectura MVC con Express.js
-- ✅ CRUD completo para Libros, Categorías, Autores y Editoriales
-- ✅ Filtrado de libros por título y categorías
-- ✅ Subida de imágenes de portada con Multer
-- ✅ Envío automático de emails al autor cuando se crea un libro (Nodemailer)
-- ✅ Validaciones en frontend y backend
-- ✅ Interfaz responsive con Bootstrap
-- ✅ Soporte multi-entorno (development/qa) con SQLite y MySQL
-- ✅ Mensajes flash para notificaciones
+-  Arquitectura MVC con Express.js
+-  CRUD completo para Libros, Categorías, Autores y Editoriales
+-  Filtrado de libros por título y categorías
+-  Subida de imágenes de portada con Multer
+-  Envío automático de emails al autor cuando se crea un libro (Nodemailer)
+-  Validaciones en frontend y backend
+-  Interfaz responsive con Bootstrap
+-  Soporte multi-entorno (development/qa) con SQLite y MySQL
+-  Mensajes flash para notificaciones
 
-## 🚀 Tecnologías Utilizadas
+##  Tecnologías Utilizadas
 
 - **Backend**: Node.js, Express.js
 - **ORM**: Sequelize
@@ -25,7 +25,7 @@ Aplicación web para gestión de libros, categorías, autores y editoriales desa
 - **Emails**: Nodemailer
 - **Variables de entorno**: dotenv, cross-env
 
-## 📦 Instalación
+##  Instalación
 
 1. Clonar el repositorio:
 ```bash

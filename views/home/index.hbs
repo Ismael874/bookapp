@@ -1,0 +1,71 @@
+<h1 class="mb-4">Biblioteca de Libros</h1>
+
+<div class="filter-section">
+    <h5><i class="fas fa-filter"></i> Filtrar libros</h5>
+    <form method="GET" action="/" class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Buscar por título</label>
+            <input type="text" class="form-control" name="title" value="{{filters.title}}" placeholder="Ingrese el título...">
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Filtrar por categorías</label>
+            <div class="row">
+                {{#each categories}}
+                <div class="col-md-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="categories" value="{{id}}" 
+                               id="cat{{id}}" {{#if (eq ../filters.categories id)}}checked{{/if}}>
+                        <label class="form-check-label" for="cat{{id}}">
+                            {{name}}
+                        </label>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search"></i> Aplicar filtros
+            </button>
+            <a href="/" class="btn btn-secondary">
+                <i class="fas fa-undo"></i> Limpiar filtros
+            </a>
+        </div>
+    </form>
+</div>
+
+<div class="row">
+    {{#each books}}
+    <div class="col-md-4 col-lg-3">
+        <div class="card book-card h-100">
+            {{#if coverImage}}
+            <img src="{{coverImage}}" class="card-img-top book-cover" alt="{{title}}">
+            {{else}}
+            <div class="card-img-top book-cover bg-secondary d-flex align-items-center justify-content-center">
+                <i class="fas fa-book fa-3x text-white"></i>
+            </div>
+            {{/if}}
+            <div class="card-body">
+                <h5 class="card-title">{{title}}</h5>
+                <p class="card-text">
+                    <small class="text-muted">
+                        <i class="fas fa-calendar"></i> {{publicationYear}}<br>
+                        <i class="fas fa-tag"></i> {{category.name}}<br>
+                        <i class="fas fa-user"></i> {{author.name}}<br>
+                        <i class="fas fa-building"></i> {{publisher.name}}
+                    </small>
+                </p>
+                <a href="/book/{{id}}" class="btn btn-primary btn-sm">
+                    <i class="fas fa-eye"></i> Ver detalles
+                </a>
+            </div>
+        </div>
+    </div>
+    {{else}}
+    <div class="col-12">
+        <div class="alert alert-info">
+            <i class="fas fa-info-circle"></i> No hay libros disponibles.
+        </div>
+    </div>
+    {{/each}}
+</div>

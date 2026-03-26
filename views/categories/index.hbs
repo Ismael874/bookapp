@@ -1,0 +1,40 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-tags"></i> Mantenimiento de Categorías</h1>
+    <a href="/categories/create" class="btn btn-success">
+        <i class="fas fa-plus"></i> Nueva Categoría
+    </a>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead class="table-dark">
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Cantidad de Libros</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each categories}}
+            <tr>
+                <td>{{name}}</td>
+                <td>{{description}}</td>
+                <td>{{bookCount}}</td>
+                <td>
+                    <a href="/categories/edit/{{id}}" class="btn btn-warning btn-sm">
+                        <i class="fas fa-edit"></i>
+                    </a>
+                    <a href="/categories/delete/{{id}}" class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </td>
+            </tr>
+            {{else}}
+            <tr>
+                <td colspan="4" class="text-center">No hay categorías registradas</td>
+            </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
